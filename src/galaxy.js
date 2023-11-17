@@ -48,7 +48,28 @@ export const generateGalaxy = (scene) => {
     /**
      * Points
      */
+    const starGroup = new THREE.Group()
     const points = new THREE.Points(geometry,starMaterial)
+    starGroup.add(points)
 
-    scene.add(points)
+    scene.add(starGroup)
+
+    const clock = new THREE.Clock()
+
+    const tick = () =>
+    {
+        const elapsedTime = clock.getElapsedTime()
+
+        // update yew group
+        starGroup.position.y = Math.sin(elapsedTime/20)
+
+        starGroup.rotation.x = elapsedTime/20
+        starGroup.rotation.y = - elapsedTime /30
+
+        
+        // Call tick again on the next frame
+        window.requestAnimationFrame(tick)
+    }
+
+    tick()
 }
