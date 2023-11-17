@@ -27,6 +27,9 @@ export const generateGalaxy = (scene) => {
         new THREE.BufferAttribute(positions, 3)
     )
 
+
+    const sprite = new THREE.TextureLoader().load( 'textures/disc.png' );
+
     /**
      * Material
      */
@@ -35,6 +38,9 @@ export const generateGalaxy = (scene) => {
         size: parameters.size,
         sizeAttenuation: true,
         depthWrite:false,
+        map: sprite,
+        transparent:true,
+        alphaTest:0.5,
         // blending: THREE.MultiplyBlending,
         color: parameters.color,
     })
