@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'lil-gui'
-
+import { generateGalaxy } from './galaxy'
 THREE.ColorManagement.enabled = false
 
 /**
@@ -78,10 +78,10 @@ scene.add(pointLight)
 /**
  * Materials
  */
-const material = new THREE.MeshStandardMaterial({color: 0xffb6c1})
-material.roughness = 0.7
-gui.add(material, 'metalness').min(0).max(1).step(0.001)
-gui.add(material, 'roughness').min(0).max(1).step(0.001)
+const planeMaterial = new THREE.MeshStandardMaterial({color: 0xffb6c1})
+planeMaterial.roughness = 0.7
+// gui.add(planeMaterial, 'metalness').min(0).max(1).step(0.001)
+// gui.add(planeMaterial, 'roughness').min(0).max(1).step(0.001)
 
 
 /**
@@ -89,7 +89,7 @@ gui.add(material, 'roughness').min(0).max(1).step(0.001)
  */
 const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(10, 10),
-    material
+    planeMaterial
 )
 plane.rotation.x = - Math.PI * 0.5
 plane.position.y = - 0.5
@@ -111,7 +111,7 @@ sphereShadow.position.y = plane.position.y + 0.01
 scene.add(sphereShadow)
 
 /**
- * Yew head
+ * Yew body parts
  */
 const yewHead = new THREE.Group()
 
@@ -176,11 +176,11 @@ const indices = [
 	0, 3, 0,
 ];
 
-const geometry1 = new THREE.BufferGeometry();
-geometry1.setIndex( indices );
-geometry1.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+const mouthGeometry = new THREE.BufferGeometry();
+mouthGeometry.setIndex( indices );
+mouthGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
 
-const yewMouth = new THREE.Line( geometry1, mouthMaterial );
+const yewMouth = new THREE.Line( mouthGeometry, mouthMaterial );
 yewMouth.position.set(0, -0.18, 0.3)
 yewMouth.rotation.x = Math.PI/6
 
@@ -253,6 +253,8 @@ const group = new THREE.Group()
 group.add(yewButt,yewHead,yewHat,yewBody)
 scene.add(group,plane)
 
+generateGalaxy(scene)
+
 /**
  * Sizes
  */
@@ -289,6 +291,8 @@ scene.add(camera)
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
+
+
 
 /**
  * Renderer
